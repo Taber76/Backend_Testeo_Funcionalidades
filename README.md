@@ -1,6 +1,4 @@
 # Backend-Testeo-Funcionalidades
-Desafio incorporar conceptos Factory, DAO y DTO
-***
 
 ## Consigna
 1) Revisar en forma completa el proyecto entregable que venimos realizando, refactorizando y reformando todo lo necesario para llegar al esquema de servidor API RESTful en capas planteado en esta clase.
