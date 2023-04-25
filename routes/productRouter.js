@@ -1,10 +1,11 @@
 const { Router } = require('express')  
 const productRouter = Router() 
 
-const { newProductController, getAllProductsController, getProductByIdController, delProductByIdController } = require('../controllers/productsController')
+const { newProductController, getAllProductsController, getProductByIdController, delProductByIdController, modifyProductByIdController } = require('../controllers/productsController')
 const { mock5 } = require('../DAO/mockFaker')
 const { logger, loggererr } = require('../log/logger')
 
+const { addProducts } = require('../test/auxfunction') 
 
 
 /* ------------------ router productos ----------------- */
@@ -28,7 +29,7 @@ productRouter.get(
       logger.info(`Ruta: /api${req.url}, metodo: ${req.method}`)
       res.json( product )
     } else {
-      loggererr.error(`Producto id: ${id} no encontrado`) 
+      loggererr.error(`Producto id: ${req.params.id} no encontrado`) 
       res.status(404).send({ error: 'producto no encontrado'})
     }
   }
@@ -43,10 +44,12 @@ productRouter.post(
     const loaded = await newProductController ( productToAdd )
     if ( loaded ) {
       logger.info(`Producto agregado correctamente`)
+      res.status(200).send({ msg: 'producto guardado'})
     } else {
       logger.info(`No se pudo agregar producto, datos incorrectos`)
+      res.status(400).send({ msg: 'producto no guardado'})
     }
-    res.redirect('/')
+    //res.redirect('/')
   }
 )
 
@@ -55,11 +58,12 @@ productRouter.post(
 productRouter.put(
   '/productos/:id',
   async (req, res) => {
-    if(await modifyProductByIdController( req.params.id, req.body )){
+    const response = await modifyProductByIdController( req.params.id, req.body )
+    if( response ) {
       logger.info(`Ruta: /api${req.url}, metodo: ${req.method}`)
       res.send({ message: 'producto modificado'})
     } else {
-      loggererr.error(`Producto id: ${id} no encontrado`) 
+      loggererr.error(`Producto id: ${req.params.id} no encontrado`) 
       res.status(404).send({ error: 'producto no encontrado'})
     }
   }
@@ -71,7 +75,8 @@ productRouter.delete(
   '/productos/:id',
   async (req, res) => {
     const id = req.params.id
-    if (await delProductByIdController(id)) {
+    const response = await delProductByIdController(id)
+    if ( response ) {
       logger.info(`Ruta: /api${req.url}, metodo: ${req.method}`)
       res.send({ message: 'producto borrado'})
     } else {
@@ -104,6 +109,15 @@ productRouter.get(
     logger.info(`Ruta: /api${req.url}, metodo: ${req.method}`)
     res.send(tabla)
 
+  }
+)
+
+
+productRouter.post(
+  '/productos-test-add/:number',
+  async (req, res) => {
+    addProducts(req.params.number)
+    res.send({ message: 'productos agregados'})
   }
 )
 

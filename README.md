@@ -1,27 +1,39 @@
-# Backend-Arquitectura-Capas-Mejorada
+# Backend-Testeo-Funcionalidades
 Desafio incorporar conceptos Factory, DAO y DTO
 ***
 
 ## Consigna
-1) Modificar la capa de persistencia incorporando los conceptos de Factory, DAO, y DTO.
-2) Los DAOs deben presentar la misma interfaz hacia la lógica de negocio de nuestro servidor.
-3) El DAO seleccionado (por un parámetro en línea de comandos como lo hicimos anteriormente) será devuelto por una Factory para que la capa de negocio opere con el.
-4) Cada uno de estos casos de persistencia, deberán ser implementados usando el patrón singleton que impida crear nuevas instancias de estos mecanismos de acceso a los datos.
-5) Comprobar que si llamo a la factory dos veces, con una misma opción elegida, devuelva la misma instancia.
-6) Implementar el patrón Repository para la persistencia de productos y mensajes. **NO REQUERIDO PARA LA ENRTEGA**.
+1) Revisar en forma completa el proyecto entregable que venimos realizando, refactorizando y reformando todo lo necesario para llegar al esquema de servidor API RESTful en capas planteado en esta clase.
+2) Asegurarse de dejar al servidor bien estructurado con su ruteo / controlador, negocio, validaciones, persistencia y configuraciones (preferentemente utilizando en la codificación clases de ECMAScript).
+
+### No hace falta realizar un cliente ya que utilizaremos tests para verificar el correcto funcionamiento de las funcionalidades desarrolladas.
+### AXIOS
+3) Desarrollar un cliente HTTP de pruebas que utilice Axios para enviar peticiones, y realizar un test de la funcionalidad hacia la API Rest de productos, verificando la correcta lectura de productos disponibles, incorporación de nuevos productos, modificación y borrado.
+4) Realizar el cliente en un módulo independiente y desde un código aparte generar las peticiones correspondientes, revisando los resultados desde la base de datos y en la respuesta del servidor obtenida en el cliente HTTP.
+
+### MOCHA 
+5) Luego, realizar las mismas pruebas, a través de un código de test apropiado, que utilice mocha, chai y Supertest, para probar cada uno de los métodos HTTP de la API Rest de productos.
+6) Escribir una suite de test para verificar si las respuestas a la lectura, incorporación, modificación y borrado de productos son las apropiadas. Generar un reporte con los resultados obtenidos de la salida del test.
+
 
 
 ## Entrega
-### Descripcion general
-Se ha agregado la opcion de persistencia de datos en memoria mediante la variable de entorno **PERSISTENCE** (si la misma tiene el valor MEMORY la persistencia de datos sera en memoria, en otro caso la persistencia usara MongoDB).
-El funcionamiento es el que se describe a continuacion para la persistencia de datos de productos, aplica a los tres tipos de datos que se almacenan (productos, usuarios y chat).
+La estructura del servidor es la siguiente:
+**DAO || DTO || Controller || Route || Server**.
 
-'./DAO/factory.js' -> devuelve el objeto **getDao** que segun el valor de la variable **persistence**, en la clave 'products' contiene el objeto 'MemoryProductDao' o 'MongoProductDao'. Utiliza el patron singleton para evitar crear multiples instancias de los objetos de datos.
+### AXIOS
+En la carpeta _AXIOS se ha implementado el script axios.js que puede realizar las siguientes peticiones:
+#### method: 'post', url: `http://localhost:8080/api/productos/nuevo`
+#### method: 'get', url: `http://localhost:8080/api/productos`
+#### method: 'put', url: `http://localhost:8080/api/productos/${id}`
+#### method: 'delete', url: `http://localhost:8080/api/productos/${id}`
 
-'./DAO/MemoryProductDao.js' y './DAO/MongoProductDao.js' -> definen la clase y metodos del objeto **producto** para persistencia en memoria o MongoDb respectivamente.
+### MOCHA || CHAI || SUPERTEST
+#### CHAI
+Se ha implementado /test/controllers.products.test.js para testear las funciones controller: **getAllProductsController, newProductController, getProductByIdController y delProductByIdController.**
+Se ha generado un reporte /test/controllerstest.txt con el comando "npx mocha > ./test/controllerstest.txt"
 
-'./DTO/productDto.js -> recibe el objeto de persistencia suministrado y define las funciones del DTO.
-
-El resto del proceso es igual al que se venia trabajando anteriormente, por lo que las capas son las siguientes:
-**DAO || DTO || Controller || Route || Server ||| Frontend**.
+#### CHAI + SUPERTEST
+Se ha implementado /test/integration/api.products.test.js para generar las peticiones HTTP a la api de productos.
+Se ha generado el reporte /test/integration/supertest.txt con el comando "npm test"
   

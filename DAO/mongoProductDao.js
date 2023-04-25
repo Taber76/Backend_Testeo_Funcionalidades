@@ -19,7 +19,6 @@ class MongoProductDao {
   async getById( id ) {
     try {
       await connectToDb()
-      //const id = Number(req.params.id)
       const documentInDb = await productModel.find({_id: id})
       return documentInDb ? documentInDb : null
 
@@ -32,9 +31,8 @@ class MongoProductDao {
   async deleteById( id ) {  
     try {
       await connectToDb()
-      //const id = Number(req.params.id)
       await productModel.deleteOne({ _id: id })
-      return 
+      return true
     } catch(err) {
       console.log(`Error: ${err}`)
       return false
@@ -66,6 +64,27 @@ class MongoProductDao {
       console.log(`Error: ${err}`)
     }
   }
+
+
+  async modifyById( id, item ) {  
+    try {
+      await connectToDb()
+      const result = await productModel.findByIdAndUpdate(id, item)
+      if (result !== null){
+        console.log(`Se ha actualizado el elemento con id: ${id}`)
+        return true
+      } else {
+        console.log(`No se ha encontrado ningún elemento con id: ${id}`)
+        return false
+      }
+    } catch(err) {
+      console.log(`Error: ${err}`)
+      return false
+    }
+  }
+  
+
+
 
 }
 

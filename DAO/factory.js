@@ -18,10 +18,12 @@ const getDao = async() => {
       productsDao = new MemoryProductDao([])
       usersDao = new MemoryUserDao([])
       chatsDao = new MemoryChatDao({ chat: [] })
+      //console.log('Persistencia en memoria')
     } else {
       productsDao = await new MongoProductDao()
       usersDao = await new MongoUserDao()
       chatsDao = await new MongoChatDao()
+      console.log('Persistencia en MongoDb')
     }
   }
   return {

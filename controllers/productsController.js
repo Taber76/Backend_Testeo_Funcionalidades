@@ -1,4 +1,4 @@
-const { getAllProductsDto, getProductByIdDto, delProductByIdDto, addNewProductDto } = require('../DTO/productDto')
+const { getAllProductsDto, getProductByIdDto, delProductByIdDto, addNewProductDto, modifyProductByIdDto } = require('../DTO/productDto')
 
 
 const validateObject = ( objeto ) => { // retorna true si hay algun campo vacio
@@ -31,9 +31,14 @@ const getProductByIdController = async( id ) => {
 }
 
 const delProductByIdController = async( id ) => {
-  await delProductByIdDto( id )
-  return
+  const response = await delProductByIdDto( id )
+  return response
+}
+
+const modifyProductByIdController = async( id, item ) => {
+  const response = await modifyProductByIdDto( id, item )
+  return response
 }
 
 
-module.exports = { newProductController, getAllProductsController, getProductByIdController, delProductByIdController }
+module.exports = { newProductController, getAllProductsController, getProductByIdController, delProductByIdController, modifyProductByIdController }
